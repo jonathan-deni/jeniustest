@@ -33,29 +33,29 @@ function ContactItem(item) {
         }
     }
 
-    return <View style={{ height: 100, padding: 15, flexDirection: 'row' }}>
+    return <View style={styles.cardContainer}>
         {item['photo'] == 'N/A' ? 
-            <Icon style={{ width: 75, height: 75, borderRadius: 75 / 2, alignSelf:'center' }} name="user-circle" size={75} color='grey' /> : 
-            <Image style={{ width: 75, height: 75, borderRadius: 75 / 2, alignSelf:'center' }} source={{ uri: item['photo'] }}/>}
-        <View style={{ justifyContent:'center', width: '70%', paddingHorizontal: 10 }}>
-            <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+            <Icon style={styles.imgContainer} name="user-circle" size={75} color='grey' /> : 
+            <Image style={styles.imgContainer} source={{ uri: item['photo'] }}/>}
+        <View style={styles.contactInfoContainer}>
+            <View style={styles.contactInfoText}>
                 <Text>First Name</Text>
                 <Text>{item['firstName']}</Text>
             </View>
-            <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+            <View style={styles.contactInfoText}>
                 <Text>Last Name</Text>
                 <Text>{item['lastName']}</Text>
             </View>
-            <View style={{ justifyContent: 'space-between', flexDirection: 'row' }}>
+            <View style={styles.contactInfoText}>
                 <Text>Age</Text>
                 <Text>{item['age']}</Text>
             </View>
         </View>
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <TouchableOpacity onPress={() => { onPressUpdateContact(item) }} style={{ flex: 1 }}>
+        <View style={styles.cardIconContainer}>
+            <TouchableOpacity onPress={() => { onPressUpdateContact(item) }} style={styles.cardIcon}>
                 <Icon name="edit" size={30} color='grey' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => { onPressDeleteContact(item) }} style={{ flex: 1 }}>
+            <TouchableOpacity onPress={() => { onPressDeleteContact(item) }} style={styles.cardIcon}>
                 <Icon name="trash" size={30} color='grey' />
             </TouchableOpacity>
         </View>
@@ -82,18 +82,18 @@ const Home = () => {
     return (
         <SafeAreaView style={styles.container}>
             <TouchableOpacity onPress={() => { navigation.navigate('AddContact') }} style={{ width: '50%', height: 40, marginTop: 10, backgroundColor: 'blue', alignItems: 'center', justifyContent: 'center', alignSelf: 'center', borderRadius: 10 }}>
-                <Text style={{ color: 'white' }}>+ Add Contact</Text>
+                <Text style={styles.textBtn}>+ Add Contact</Text>
             </TouchableOpacity>
-            <View style={{ flex: 1, marginTop: 10 }}>
+            <View style={styles.flatListView}>
                 {
                     isLoading ?
-                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <View style={styles.loadingContainer}>
                             <ActivityIndicator size="large" color="#00ff00" />
                         </View>
                         :
                         <FlatList
                             data={contactList}
-                            style={{ flex: 1 }}
+                            style={styles.contactListContainer}
                             keyExtractor={item => item.id}
                             ItemSeparatorComponent={() => Separator()}
                             renderItem={({ item }) => (
@@ -113,6 +113,49 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F6F6F6',
     },
+    contactListContainer: { 
+        flex: 1 
+    },
+    loadingContainer: { 
+        flex: 1, 
+        justifyContent: 'center', 
+        alignItems: 'center' 
+    },
+    textBtn: { 
+        color: 'white' 
+    },
+    flatListView: { 
+        flex: 1, 
+        marginTop: 10 
+    }, 
+    cardContainer: { 
+        height: 100, 
+        padding: 15, 
+        flexDirection: 'row' 
+    },
+    imgContainer: { 
+        width: 75, 
+        height: 75, 
+        borderRadius: 75 / 2, 
+        alignSelf:'center' 
+    },
+    contactInfoContainer: { 
+        justifyContent:'center', 
+        width: '70%', 
+        paddingHorizontal: 10 
+    },
+    contactInfoText: { 
+        justifyContent: 'space-between', 
+        flexDirection: 'row' 
+    },
+    cardIconContainer: {
+        flex: 1, 
+        justifyContent: 'center', 
+        alignItems: 'center' 
+    },
+    cardIcon: { 
+        flex: 1 
+    }
 });
 
 //make this component available to the app

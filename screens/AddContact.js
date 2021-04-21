@@ -1,6 +1,6 @@
 //import liraries
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Text, Alert } from 'react-native';
+import { View, TextInput, StyleSheet, TouchableOpacity, Text, Alert, ActivityIndicator } from 'react-native';
 import { useNavigation, StackActions } from '@react-navigation/native';
 import { ADD_CONTACT } from '../redux/ContactList';
 import { useDispatch } from 'react-redux';
@@ -11,6 +11,7 @@ const AddContact = () => {
     const [lastName, setLastName] = useState('')
     const [age, setAge] = useState(0)
     const [photo, setPhoto] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
 
     const navigation = useNavigation()
     const popAction = StackActions.pop(1);
@@ -31,14 +32,17 @@ const AddContact = () => {
                 body: JSON.stringify(newContactObj),
                 method: 'POST',
             }
+            setIsLoading(true)
             const response = await fetch('https://simple-contact-crud.herokuapp.com/contact', params);
             const addContactList = await response.json();
 
             console.log("<<<ADD CONTACT", addContactList, addContactList.message)
             if (addContactList.message == "contact saved") {
+                setIsLoading(false)
                 addContact(newContactObj)
                 navigation.dispatch(popAction)
             } else {
+                setIsLoading(false)
                 Alert.alert('Add Contact Error', addContactList.message)
             }
         } else {
@@ -70,7 +74,11 @@ const AddContact = () => {
             />
 
             <TouchableOpacity onPress={() => { onPressedAddContact() }} style={{ width: '50%', height: 40, backgroundColor: 'blue', alignItems: 'center', justifyContent: 'center', alignSelf: 'center', borderRadius: 10 }}>
-                <Text style={{ color: 'white' }}>+ Add Contact</Text>
+                {
+                    isLoading ?
+                    <ActivityIndicator color="white"/> :
+                    <Text style={styles.textBtn}>+ Add Contact</Text>
+                }
             </TouchableOpacity>
 
         </View>
@@ -87,7 +95,11 @@ const styles = StyleSheet.create({
         height: 40,
         margin: 12,
         borderWidth: 1,
+        paddingHorizontal: 10
     },
+    textBtn: { 
+        color: 'white' 
+    }
 });
 
 //make this component available to the app
